@@ -5,6 +5,10 @@
  */
 import * as THREE from 'three';
 
+// The shader writes design-palette values straight to the framebuffer, so keep
+// three from converting the uniform colours to linear space.
+THREE.ColorManagement.enabled = false;
+
 const html = document.documentElement;
 const host = document.querySelector('[data-cover-orb]');
 const canvas = host && host.querySelector('[data-cover-canvas]');
@@ -147,11 +151,12 @@ if (!host || !canvas || html.classList.contains('static') || reduced) {
 
     // render only while visible
     let visible = true;
+    let lost = false;
     let raf = 0;
     const clock = new THREE.Clock();
     const tick = () => {
       raf = 0;
-      if (!visible || document.hidden) return;
+      if (!visible || document.hidden || lost) return;
       const dt = Math.min(clock.getDelta(), 0.05);
       uniforms.uTime.value += dt;
       uniforms.uPointer.value.lerp(target, 0.04);
@@ -166,7 +171,14 @@ if (!host || !canvas || html.classList.contains('static') || reduced) {
       new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start(); }, { threshold: 0 }).observe(host);
     }
     document.addEventListener('visibilitychange', () => { if (!document.hidden) start(); });
-    renderer.domElement.addEventListener('webglcontextlost', (e) => { e.preventDefault(); fallback(); });
+    renderer.domElement.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      lost = true;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      fallback();
+    });
+    renderer.domElement.addEventListener('webglcontextrestored', () => { lost = false; start(); });
     start();
   }
 }

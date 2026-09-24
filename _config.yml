@@ -22,5 +22,6 @@ exclude:
   - node_modules
   - scripts
   - assets/img/originals   # 40 MB of source photos — never shipped to the site
+  - assets/pdf/reference   # the client's source PDF stays in the repo, not on the public site
   - README.md
   - .github

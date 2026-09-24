@@ -81,6 +81,9 @@
     if (lenis) lenis.scrollTo(target, { offset: -48, duration: 1.4, easing: (t) => 1 - Math.pow(1 - t, 4) });
     else target.scrollIntoView({ behavior: 'smooth' });
     history.pushState(null, '', id);
+    // native fragment navigation was cancelled above, so move keyboard focus ourselves
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
   });
 
   const fontsReady = Promise.race([
@@ -97,9 +100,13 @@
     const fades = $$('[data-cover-fade]');
     gsap.set(fades, { opacity: 0, y: 26 });
     const tl = gsap.timeline({ delay: 0.15 });
+    let introPlayed = false;
     SplitText.create(title, {
-      type: 'lines,chars', mask: 'lines', linesClass: 'line', charsClass: 'char',
+      type: 'lines,chars', mask: 'lines', linesClass: 'line', charsClass: 'char', autoSplit: true,
       onSplit(self) {
+        // autoSplit re-splits when fonts land or the width changes; only animate the first time
+        if (introPlayed) { gsap.set(title, { opacity: 1 }); return; }
+        introPlayed = true;
         gsap.set(self.chars, { yPercent: 115, rotate: 4 });
         gsap.set(title, { opacity: 1 });
         return gsap.to(self.chars, { yPercent: 0, rotate: 0, duration: 1.3, ease: 'power4.out', stagger: 0.03 });
@@ -246,10 +253,13 @@
     }
     const donut = $('[data-chart="donut"]');
     if (donut) {
+      // final geometry lives in the attributes; the tween animates the attribute so a
+      // print before the reveal (opacity forced on by the print stylesheet) still shows the chart
       const segs = donutFinal();
       const tl = gsap.timeline({ scrollTrigger: once(donut, 'top 75%') });
       segs.forEach(({ seg, len }, i) => {
-        tl.fromTo(seg, { strokeDasharray: `0 ${CIRC}` }, { strokeDasharray: `${len} ${CIRC}`, duration: 0.9, ease: 'power2.inOut' }, i * 0.45);
+        tl.set(seg, { opacity: 1 }, i * 0.45);
+        tl.fromTo(seg, { attr: { 'stroke-dasharray': `0 ${CIRC}` } }, { attr: { 'stroke-dasharray': `${len} ${CIRC}` }, duration: 0.9, ease: 'power2.inOut', immediateRender: false }, i * 0.45);
       });
     }
     $$('[data-count]').forEach((el) => {
