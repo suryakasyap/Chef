@@ -8,7 +8,9 @@
   const isStatic = html.classList.contains('static');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGsap = !!(window.gsap && window.ScrollTrigger && window.SplitText);
-  const motion = hasGsap && !reduced && !isStatic;
+  // If the CDN was slow enough that the <head> safety timer already unhid the page
+  // (html.motion removed), stay in the plain mode instead of re-hiding and animating late.
+  const motion = hasGsap && !reduced && !isStatic && html.classList.contains('motion');
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const CIRC = 2 * Math.PI * 48;

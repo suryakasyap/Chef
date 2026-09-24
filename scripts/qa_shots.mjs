@@ -12,7 +12,7 @@ const report = [];
 async function shoot(name, { width, height, url, scrollThrough }) {
   const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1, ignoreHTTPSErrors: !!process.env.QA_IGNORE_TLS });
   const page = await ctx.newPage();
-  await cache.install(page);
+  if (!process.env.QA_NO_CACHE) await cache.install(page);
   const errors = [];
   page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(`${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
