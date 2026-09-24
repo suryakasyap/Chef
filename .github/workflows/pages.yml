@@ -1,5 +1,8 @@
-# Builds the Jekyll site and publishes it to GitHub Pages.
-# Pages source must be "GitHub Actions" (configure-pages tries to enable it on first run).
+# Builds the Jekyll site and publishes the result to the `gh-pages` branch,
+# which GitHub Pages serves at https://suryakasyap.github.io/Chef/ .
+# Publishing to a branch only needs the default token's `contents: write`,
+# so it works without any repository-settings changes (creating a Pages site
+# through the API is not allowed for the default Actions token).
 name: Deploy to GitHub Pages
 
 on:
@@ -8,16 +11,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,22 +26,16 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
-      - id: pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: bundle exec jekyll build --baseurl "/${{ github.event.repository.name }}"
         env:
           JEKYLL_ENV: production
-      - uses: actions/upload-pages-artifact@v3
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish _site to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
+          enable_jekyll: false   # writes .nojekyll so Pages serves _site as-is
+          commit_message: "Publish site build ${{ github.sha }}"

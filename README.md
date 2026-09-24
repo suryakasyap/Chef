@@ -74,7 +74,7 @@ node scripts/qa_shots.mjs http://127.0.0.1:4173/_site/ ./qa-out
 
 ## Deploying
 
-Pushing to `main` (or the feature branch listed in the workflow) runs `.github/workflows/pages.yml`, which builds the site and deploys it. The first run enables GitHub Pages with the "GitHub Actions" source; if the repository's settings block that, set **Settings → Pages → Source → GitHub Actions** once and re-run the workflow.
+Pushing to `main` (or the feature branch listed in the workflow) runs `.github/workflows/pages.yml`: it builds the site with Jekyll and publishes `_site` to the `gh-pages` branch, which GitHub Pages serves at https://suryakasyap.github.io/Chef/. No repository settings are required for that; if Pages ever shows as disabled, set **Settings → Pages → Source → Deploy from a branch → `gh-pages` / `(root)`**.
 
 ## Content notes
 
