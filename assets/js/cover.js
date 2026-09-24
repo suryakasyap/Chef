@@ -1,5 +1,6 @@
 /* Cover orb — a noise-displaced sphere lit like the PDF's gold sphere.
- * three.js (WebGL) with a custom GLSL vertex/fragment pair. three is imported
+ * three.js (WebGL) with a custom GLSL vertex/fragment pair, plus a plate-like
+ * ring carrying the four stress-eating-loop nodes. three is imported
  * lazily, after the guards, so static mode, reduced motion and no-WebGL
  * visitors never download it. Renders only while the cover is on screen and
  * falls back to the CSS gradient sphere whenever anything is unavailable.
@@ -36,17 +37,18 @@ function init(THREE) {
   } else {
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;   // palette values pass through untouched
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 20);
-    camera.position.z = 4.2;
+    camera.position.z = 5.9;
 
     const coarse = window.matchMedia('(pointer: coarse)').matches;
     const geometry = new THREE.IcosahedronGeometry(1.0, coarse ? 28 : 48);
 
     const uniforms = {
       uTime: { value: 0 },
-      uAmp: { value: 0.07 },
+      uAmp: { value: 0.045 },
       uPointer: { value: new THREE.Vector2(0, 0) },
       uCream: { value: new THREE.Color('#f2dcb6') },
       uGold: { value: new THREE.Color('#c6a77b') },
@@ -85,8 +87,8 @@ function init(THREE) {
       varying vec3 vNormal; varying vec3 vView; varying float vDisp;
       ${NOISE}
       float disp(vec3 p){
-        float n = snoise(p * 1.05 + vec3(uTime * 0.14, uTime * 0.1, uTime * 0.06));
-        float n2 = snoise(p * 2.4 - vec3(0.0, uTime * 0.18, 0.0)) * 0.18;
+        float n = snoise(p * 0.9 + vec3(uTime * 0.12, uTime * 0.09, uTime * 0.05));
+        float n2 = snoise(p * 2.2 - vec3(0.0, uTime * 0.16, 0.0)) * 0.12;
         float push = dot(normalize(p), normalize(vec3(uPointer.x, -uPointer.y, 0.6))) * 0.5;
         return (n + n2 + push * 0.18) * uAmp;
       }
@@ -134,41 +136,100 @@ function init(THREE) {
       }`;
 
     const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    const orb = new THREE.Mesh(geometry, material);
+
+    /* The system: the gold orb is the psyche; a thin plate-like ring carries the four
+       stress-eating-loop nodes (same colours and order as the diagram), orbiting slowly. */
+    const system = new THREE.Group();
+    scene.add(system);
+    system.add(orb);
+    const tilt = new THREE.Group();
+    tilt.rotation.set(1.08, 0, -0.42);
+    system.add(tilt);
+    const spin = new THREE.Group();
+    tilt.add(spin);
+    const RING_R = 1.55;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(RING_R, 0.007, 8, 240), new THREE.MeshBasicMaterial({ color: 0xd4b483, transparent: true, opacity: 0.6 }));
+    ring.rotation.x = Math.PI / 2;
+    spin.add(ring);
+    scene.add(new THREE.AmbientLight(0xf5ebda, 0.7));
+    const key = new THREE.DirectionalLight(0xffe9c4, 1.4);
+    key.position.set(-2.2, 3, 4);
+    scene.add(key);
+    const NODES = [['Stress', 0x3d2417], ['Craving', 0x16223e], ['Relief', 0x553b28], ['Guilt', 0xd4b483]];
+    const nodeGeo = new THREE.SphereGeometry(0.11, 32, 24);
+    const nodes = NODES.map(([name, color], i) => {
+      const m = new THREE.Mesh(nodeGeo, new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.08 }));
+      const a = i * Math.PI / 2;
+      m.position.set(Math.cos(a) * RING_R, 0, Math.sin(a) * RING_R);
+      spin.add(m);
+      return m;
+    });
+    const labels = Array.from(host.querySelectorAll('[data-orb-label]'));
+    const world = new THREE.Vector3();
+    const view = new THREE.Vector3();
 
     // size to the host box
+    let W = 1, H = 1;
     const resize = () => {
       const r = host.getBoundingClientRect();
-      const w = Math.max(1, Math.round(r.width));
-      const h = Math.max(1, Math.round(r.height));
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
+      W = Math.max(1, Math.round(r.width));
+      H = Math.max(1, Math.round(r.height));
+      renderer.setSize(W, H, false);
+      camera.aspect = W / H;
       camera.updateProjectionMatrix();
     };
     resize();
     if ('ResizeObserver' in window) new ResizeObserver(resize).observe(host); else window.addEventListener('resize', resize);
 
-    // pointer → gentle tilt + a soft push on the surface
+    // pointer → gentle tilt of the whole system + a soft push on the orb's surface
     const target = new THREE.Vector2(0, 0);
     window.addEventListener('pointermove', (e) => {
       target.set(e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5);
     }, { passive: true });
 
+    const placeLabels = () => {
+      camera.updateMatrixWorld();
+      const orbDepth = orb.getWorldPosition(world).applyMatrix4(camera.matrixWorldInverse).z;
+      nodes.forEach((node, i) => {
+        const label = labels[i];
+        if (!label) return;
+        node.getWorldPosition(world);
+        view.copy(world).applyMatrix4(camera.matrixWorldInverse);
+        const behind = view.z < orbDepth - 0.15;
+        world.project(camera);
+        const x = (world.x * 0.5 + 0.5) * W;
+        const y = (-world.y * 0.5 + 0.5) * H;
+        const dx = world.x * (W / 2), dy = world.y * (H / 2);
+        const occluded = behind && Math.hypot(dx, dy) < Math.min(W, H) * 0.19;
+        label.style.transform = `translate(${x.toFixed(1)}px, ${(y - 22).toFixed(1)}px) translate(-50%, -50%)`;
+        label.style.opacity = occluded ? '0' : behind ? '0.42' : '1';
+      });
+    };
+
     // render only while visible
     let visible = true;
     let lost = false;
     let raf = 0;
+    let t = 0;
     const clock = new THREE.Clock();
     const tick = () => {
       raf = 0;
       if (!visible || document.hidden || lost) return;
       const dt = Math.min(clock.getDelta(), 0.05);
-      uniforms.uTime.value += dt;
+      t += dt;
+      uniforms.uTime.value = t;
+      // a slow heartbeat: the surface tenses and settles like a craving building and easing
+      const beat = Math.pow(Math.max(0, Math.sin(t * 1.15)), 6);
+      uniforms.uAmp.value = 0.045 + 0.02 * beat;
+      orb.scale.setScalar(1 + 0.014 * beat);
       uniforms.uPointer.value.lerp(target, 0.04);
-      mesh.rotation.y += ((target.x * 0.6) - mesh.rotation.y) * 0.03 + dt * 0.05;
-      mesh.rotation.x += ((target.y * 0.35) - mesh.rotation.x) * 0.03;
+      orb.rotation.y += dt * 0.06;
+      system.rotation.y += ((target.x * 0.55) - system.rotation.y) * 0.03;
+      system.rotation.x += ((target.y * 0.35) - system.rotation.x) * 0.03;
+      spin.rotation.y -= dt * 0.17;
       renderer.render(scene, camera);
+      placeLabels();
       if (!host.classList.contains('is-webgl')) host.classList.add('is-webgl');
       raf = requestAnimationFrame(tick);
     };

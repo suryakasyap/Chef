@@ -14,6 +14,59 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const CIRC = 2 * Math.PI * 48;
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+  let lenis = null;
+  html.classList.add('on-cover');
+
+  /* ---------- section menu (both modes) ---------- */
+  function initMenu() {
+    const toggle = $('[data-menu-toggle]');
+    const menu = $('[data-menu]');
+    if (!toggle || !menu) return;
+    const groups = $$('[data-menu-group]', menu);
+    let open = false;
+    let lastFocus = null;
+    const origin = () => { const r = toggle.getBoundingClientRect(); return `${Math.round(r.left + r.width / 2)}px ${Math.round(r.top + r.height / 2)}px`; };
+    const setState = (next) => {
+      open = next;
+      toggle.setAttribute('aria-expanded', String(next));
+      toggle.setAttribute('aria-label', next ? 'Close the section menu' : 'Open the section menu');
+      html.classList.toggle('menu-open', next);
+    };
+    const show = () => {
+      lastFocus = document.activeElement;
+      menu.hidden = false;
+      setState(true);
+      if (lenis) lenis.stop();
+      if (motion) {
+        const o = origin();
+        gsap.killTweensOf([menu, groups]);
+        gsap.set(menu, { clipPath: `circle(0px at ${o})` });
+        gsap.set(groups, { opacity: 0, y: 18 });
+        gsap.timeline()
+          .to(menu, { clipPath: `circle(${Math.hypot(window.innerWidth, window.innerHeight)}px at ${o})`, duration: 0.85, ease: 'power3.inOut' })
+          .to(groups, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out' }, 0.35);
+      }
+      const first = $('a', menu);
+      if (first) first.focus({ preventScroll: true });
+    };
+    const hide = (restoreFocus) => {
+      setState(false);
+      if (lenis) lenis.start();
+      const done = () => { menu.hidden = true; };
+      if (motion) {
+        gsap.killTweensOf([menu, groups]);
+        gsap.to(menu, { clipPath: `circle(0px at ${origin()})`, duration: 0.5, ease: 'power3.inOut', onComplete: done });
+      } else done();
+      if (restoreFocus && lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    };
+    toggle.addEventListener('click', () => (open ? hide(true) : show()));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) hide(true); });
+    // capture phase: close (and restart Lenis) before the document anchor handler scrolls
+    menu.addEventListener('click', (e) => { if (e.target.closest('a[data-menu-link]')) hide(false); }, true);
+  }
+  initMenu();
 
   /* ---------- shared: donut geometry + loop arrows (both modes) ---------- */
   function donutFinal() {
@@ -39,7 +92,11 @@
     const sections = $$('[data-chapter]');
     const onScroll = () => {
       const y = window.scrollY;
-      if (cover && topbar) topbar.classList.toggle('is-visible', y > cover.offsetHeight - 80);
+      if (cover && topbar) {
+        const past = y > cover.offsetHeight - 80;
+        topbar.classList.toggle('is-visible', past);
+        html.classList.toggle('on-cover', !past);
+      }
       if (progress) {
         const max = document.documentElement.scrollHeight - window.innerHeight;
         progress.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
@@ -63,7 +120,6 @@
   gsap.defaults({ ease: 'power3.out' });
 
   // Smooth scroll (desktop pointer devices only; touch keeps native scrolling)
-  let lenis = null;
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (window.Lenis && finePointer) {
     lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
@@ -126,8 +182,8 @@
     if (topbar && cover) {
       ScrollTrigger.create({
         trigger: cover, start: 'bottom top+=90',
-        onEnter: () => topbar.classList.add('is-visible'),
-        onLeaveBack: () => topbar.classList.remove('is-visible'),
+        onEnter: () => { topbar.classList.add('is-visible'); html.classList.remove('on-cover'); },
+        onLeaveBack: () => { topbar.classList.remove('is-visible'); html.classList.add('on-cover'); },
       });
     }
     gsap.to('[data-progress]', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#magazine', start: 'top top', end: 'bottom bottom', scrub: 0.4 } });
@@ -226,15 +282,22 @@
       gsap.set(p, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 });
     });
     gsap.set(nodes, { scale: 0, opacity: 1, transformOrigin: '50% 50%' });
+    const lens = arcs.map((p) => p.getTotalLength());
+    // One continuous sweep: p runs from -0.4 to 4. Node i grows in over p ∈ [i-0.4, i],
+    // arc i draws over p ∈ [i, i+1], so the motion travels around the circle without stopping.
+    const sweep = { p: -0.4 };
+    const render = () => {
+      nodes.forEach((node, i) => gsap.set(node, { scale: easeOutCubic(clamp01((sweep.p - (i - 0.4)) / 0.4)) }));
+      arcs.forEach((arc, i) => {
+        const local = clamp01(sweep.p - i);
+        gsap.set(arc, { strokeDashoffset: lens[i] * (1 - local) });
+        if (local >= 1 && !arc.hasAttribute('marker-end')) arc.setAttribute('marker-end', arc.dataset.marker);
+      });
+    };
     const tl = gsap.timeline({ scrollTrigger: once(loop, 'top 72%') });
-    if (ring) tl.fromTo(ring, { opacity: 0 }, { opacity: 1, duration: 1.2 }, 0);
-    nodes.forEach((node, i) => {
-      const at = i * 0.55;
-      tl.to(node, { scale: 1, duration: 0.6, ease: 'back.out(1.8)' }, at);
-      const arc = arcs[i];
-      if (arc) tl.to(arc, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.inOut', onComplete: () => arc.setAttribute('marker-end', arc.dataset.marker) }, at + 0.3);
-    });
-    if (caption) tl.fromTo(caption, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.2');
+    if (ring) tl.fromTo(ring, { opacity: 0 }, { opacity: 1, duration: 1.4 }, 0);
+    tl.to(sweep, { p: 4, duration: 3.2, ease: 'power2.inOut', onUpdate: render }, 0.05);
+    if (caption) tl.fromTo(caption, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9 }, '-=0.9');
   }
 
   function initCharts() {
@@ -256,11 +319,12 @@
       // final geometry lives in the attributes; the tween animates the attribute so a
       // print before the reveal (opacity forced on by the print stylesheet) still shows the chart
       const segs = donutFinal();
+      // One continuous sweep from 12 o'clock: each share fills exactly where the previous one stops.
+      const sweep = { p: 0 };
+      const render = () => segs.forEach(({ seg, len, offset }) => seg.setAttribute('stroke-dasharray', `${Math.max(0, Math.min(len, sweep.p - offset))} ${CIRC}`));
       const tl = gsap.timeline({ scrollTrigger: once(donut, 'top 75%') });
-      segs.forEach(({ seg, len }, i) => {
-        tl.set(seg, { opacity: 1 }, i * 0.45);
-        tl.fromTo(seg, { attr: { 'stroke-dasharray': `0 ${CIRC}` } }, { attr: { 'stroke-dasharray': `${len} ${CIRC}` }, duration: 0.9, ease: 'power2.inOut', immediateRender: false }, i * 0.45);
-      });
+      tl.add(() => { render(); gsap.set(segs.map((s) => s.seg), { opacity: 1 }); });
+      tl.to(sweep, { p: CIRC, duration: 2, ease: 'power2.inOut', onUpdate: render }, 0.05);
     }
     $$('[data-count]').forEach((el) => {
       const target = Number(el.dataset.count);

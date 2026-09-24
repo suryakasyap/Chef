@@ -1,0 +1,35 @@
+# Chapter → spread map used by the section menu (_includes/menu.html).
+- num: "01"
+  chapter: "Foundations"
+  spreads:
+    - { id: foundations-what,    title: "What even is comfort food?" }
+    - { id: foundations-hungry,  title: "Hungry, or just tired?" }
+    - { id: foundations-loop,    title: "The stress-eating loop" }
+- num: "02"
+  chapter: "Neurobiology"
+  spreads:
+    - { id: neuro-brain,  title: "What's actually happening in your brain" }
+    - { id: neuro-sugar,  title: "Why sugar and fat always win" }
+    - { id: neuro-guilt,  title: "A conversation about guilt" }
+- num: "03"
+  chapter: "Culture & Heritage"
+  spreads:
+    - { id: culture-bowls,     title: "Four bowls, four cultures, one feeling" }
+    - { id: culture-smell,     title: "Smell walks you straight back home" }
+    - { id: culture-surrogacy, title: "When food stands in for people" }
+- num: "04"
+  chapter: "The Data"
+  spreads:
+    - { id: data-sources,  title: "Where these numbers actually come from" }
+    - { id: data-findings, title: "What the research actually found" }
+    - { id: data-gender,   title: "Men, women, and very different cravings" }
+- num: "05"
+  chapter: "Modern Trends"
+  spreads:
+    - { id: trends-nostalgia,    title: "Nostalgia, sold back to us" }
+    - { id: trends-reconsidered, title: "Comfort food, reconsidered" }
+- num: "06"
+  chapter: "Closing"
+  spreads:
+    - { id: closing,    title: "So, what did we actually learn?" }
+    - { id: references, title: "Sources & credits" }

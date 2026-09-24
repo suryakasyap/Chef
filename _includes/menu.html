@@ -1,0 +1,24 @@
+<button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="Open the section menu">
+  <span class="menu-toggle__bars" aria-hidden="true"><i></i><i></i></span>
+  <span class="menu-toggle__text" aria-hidden="true">Menu</span>
+</button>
+<nav id="site-menu" class="menu" data-menu hidden aria-label="Sections of this issue">
+  <div class="menu__inner">
+    <p class="menu__eyebrow">Plates <span class="amp">&amp;</span> Psyche · Issue No. 01 · Jump to a section</p>
+    <ol class="menu__chapters">
+      {% for ch in site.data.sections %}
+      <li class="menu__chapter" data-menu-group>
+        <p class="menu__chapter-title"><span class="menu__num">{{ ch.num }}</span>{{ ch.chapter }}</p>
+        <ul class="menu__spreads">
+          {% for s in ch.spreads %}<li><a href="#{{ s.id }}" data-menu-link>{{ s.title }}</a></li>{% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ol>
+    <p class="menu__foot" data-menu-group>
+      <a href="#top" data-menu-link>Cover</a>
+      <a href="#contents" data-menu-link>Contents</a>
+      <a href="{{ '/assets/pdf/Plates_and_Psyche_Magazine.pdf' | relative_url }}" download>Download the PDF <span aria-hidden="true">↓</span></a>
+    </p>
+  </div>
+</nav>

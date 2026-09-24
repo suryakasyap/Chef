@@ -13,8 +13,10 @@ A continuous-scroll web magazine rebuilt from the group-project PDF (*Comfort Fo
 | Site | [Jekyll 4.4](https://jekyllrb.com) (Liquid includes + `_data`) | Static, builds on GitHub Pages, no bundler |
 | Type | Playfair Display + Inter (Google Fonts) | Matches the PDF's bold serif / neutral sans pairing |
 | Motion | [GSAP 3.13](https://gsap.com) + ScrollTrigger + SplitText, [Lenis](https://lenis.darkroom.engineering) smooth scroll | Line-masked text reveals, image curtain reveals with parallax, SVG loop drawing, chart growth, count-ups, dark-theme crossfade into the closing spread |
-| WebGL | [three.js](https://threejs.org) r180, custom GLSL | The cover's gold orb: a noise-displaced sphere lit like the PDF's gradient sphere, reacting to the pointer, rendering only while on screen |
+| WebGL | [three.js](https://threejs.org) r180, custom GLSL | The cover system: the gold orb (the psyche) inside a thin plate-like ring that carries the four stress-eating-loop nodes, orbiting with floating labels; it breathes on a slow pulse, tilts toward the pointer, loads lazily and renders only while on screen |
 | Deploy | GitHub Actions → GitHub Pages (`.github/workflows/pages.yml`) | Builds with the same Jekyll version as local |
+
+A hamburger menu (top right, on every screen size) lists every spread by chapter for quick access. The stress-eating loop and the donut chart draw as one continuous sweep when scrolled into view.
 
 Everything degrades: with `prefers-reduced-motion`, without WebGL, with a blocked CDN, or with `?static=1` appended to the URL, the page simply shows all content. `?static=1` is also what the PDF exporter renders.
 
