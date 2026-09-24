@@ -149,6 +149,10 @@
 
   const once = (trigger, start = 'top 85%') => ({ trigger, start, once: true });
 
+  // SplitText's aria:'auto' copies textContent, which has no separators at <br> breaks.
+  const labelForSplit = (el) => el.setAttribute('aria-label', el.innerText.replace(/-\s+/g, '-').replace(/\s+/g, ' ').trim());
+  const hideLines = (self) => self.lines.forEach((l) => l.setAttribute('aria-hidden', 'true'));
+
   function initCover() {
     const cover = $('[data-cover]');
     const title = $('[data-cover-title]');
@@ -157,9 +161,11 @@
     gsap.set(fades, { opacity: 0, y: 26 });
     const tl = gsap.timeline({ delay: 0.15 });
     let introPlayed = false;
+    labelForSplit(title);
     SplitText.create(title, {
-      type: 'lines,chars', mask: 'lines', linesClass: 'line', charsClass: 'char', autoSplit: true,
+      type: 'lines,chars', mask: 'lines', linesClass: 'line', charsClass: 'char', autoSplit: true, aria: 'none',
       onSplit(self) {
+        hideLines(self);
         // autoSplit re-splits when fonts land or the width changes; only animate the first time
         if (introPlayed) { gsap.set(title, { opacity: 1 }); return; }
         introPlayed = true;
@@ -208,9 +214,11 @@
 
   function initHeadlines() {
     $$('[data-reveal="lines"]').forEach((el) => {
+      labelForSplit(el);
       SplitText.create(el, {
-        type: 'lines', mask: 'lines', linesClass: 'line', autoSplit: true,
+        type: 'lines', mask: 'lines', linesClass: 'line', autoSplit: true, aria: 'none',
         onSplit(self) {
+          hideLines(self);
           if (el.dataset.revealed) { gsap.set(el, { opacity: 1 }); return; }
           gsap.set(self.lines, { yPercent: 110 });
           gsap.set(el, { opacity: 1 });

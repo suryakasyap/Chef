@@ -5,11 +5,11 @@
 <nav id="site-menu" class="menu" data-menu hidden aria-label="Sections of this issue">
   <div class="menu__inner">
     <p class="menu__eyebrow">Plates <span class="amp">&amp;</span> Psyche · Issue No. 01 · Jump to a section</p>
-    <ol class="menu__chapters">
+    <ol class="menu__chapters" role="list">
       {% for ch in site.data.sections %}
       <li class="menu__chapter" data-menu-group>
         <p class="menu__chapter-title"><span class="menu__num">{{ ch.num }}</span>{{ ch.chapter }}</p>
-        <ul class="menu__spreads">
+        <ul class="menu__spreads" role="list">
           {% for s in ch.spreads %}<li><a href="#{{ s.id }}" data-menu-link>{{ s.title }}</a></li>{% endfor %}
         </ul>
       </li>

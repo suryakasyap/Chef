@@ -210,13 +210,18 @@ function init(THREE) {
     // render only while visible
     let visible = true;
     let lost = false;
+    let dead = false;
     let raf = 0;
     let t = 0;
+    let slowFrames = 0, sampled = 0;
     const clock = new THREE.Clock();
     const tick = () => {
       raf = 0;
-      if (!visible || document.hidden || lost) return;
-      const dt = Math.min(clock.getDelta(), 0.05);
+      if (!visible || document.hidden || lost || dead) return;
+      const rawDt = clock.getDelta();
+      // frame-budget guard: a software renderer that cannot hold ~20 fps would stall scrolling and focus
+      if (sampled < 90) { sampled += 1; if (rawDt > 0.05) slowFrames += 1; if (sampled === 90 && slowFrames > 45) { dead = true; fallback(); return; } }
+      const dt = Math.min(rawDt, 0.05);
       t += dt;
       uniforms.uTime.value = t;
       // a slow heartbeat: the surface tenses and settles like a craving building and easing
@@ -233,7 +238,7 @@ function init(THREE) {
       if (!host.classList.contains('is-webgl')) host.classList.add('is-webgl');
       raf = requestAnimationFrame(tick);
     };
-    const start = () => { if (!raf) { clock.getDelta(); raf = requestAnimationFrame(tick); } };
+    const start = () => { if (!raf && !dead) { clock.getDelta(); raf = requestAnimationFrame(tick); } };
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start(); }, { threshold: 0 }).observe(host);
     }
