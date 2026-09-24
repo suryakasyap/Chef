@@ -1,0 +1,188 @@
+{
+  "outDir": "assets/img/magazine",
+  "srcDir": "assets/img/originals",
+  "images": {
+    "ramen-overhead": {
+      "src": "michele-blackwell-rAyCBQTH7ws-unsplash.jpg",
+      "aspect": "16:9",
+      "focal": [
+        50,
+        48
+      ],
+      "widths": [
+        720,
+        1280,
+        1920
+      ],
+      "credit": "Michele Blackwell / Unsplash",
+      "alt": "Overhead shot of a steaming bowl of ramen with soft-boiled eggs, shrimp and snap peas, chopsticks resting across the rim"
+    },
+    "khichdi-bowl": {
+      "src": "mario-raj-shQwbFhz5tI-unsplash.jpg",
+      "aspect": "4:3",
+      "focal": [
+        50,
+        70
+      ],
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "credit": "Mario Raj / Unsplash",
+      "alt": "A bowl of yellow khichdi topped with coriander, with raw lentils and rice in the background"
+    },
+    "polenta-plate": {
+      "src": "arne-buss-42X1cpCtSQA-unsplash.jpg",
+      "aspect": "4:3",
+      "focal": [
+        50,
+        50
+      ],
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "credit": "Arne Buss / Unsplash",
+      "alt": "Creamy polenta on a white plate topped with wilted spinach and tomato sauce"
+    },
+    "ochazuke-bowl": {
+      "src": "kouji-tsuru-HY-tBvUs7xw-unsplash.jpg",
+      "aspect": "4:3",
+      "focal": [
+        50,
+        40
+      ],
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "credit": "Kouji Tsuru / Unsplash",
+      "alt": "A Japanese rice bowl topped with shredded nori and broth, with small side dishes and chopsticks on a wooden table"
+    },
+    "baked-mac-casserole": {
+      "src": "david-trinks-UN1mx680neg-unsplash.jpg",
+      "aspect": "16:9",
+      "focal": [
+        50,
+        50
+      ],
+      "widths": [
+        720,
+        1280,
+        1920
+      ],
+      "credit": "David Trinks / Unsplash",
+      "alt": "A golden-crusted baked mac and cheese in a vintage casserole dish on a stovetop"
+    },
+    "mac-and-cheese-dish": {
+      "src": "images.jpg",
+      "aspect": "4:3",
+      "focal": [
+        60,
+        50
+      ],
+      "widths": [
+        480,
+        674
+      ],
+      "credit": "Source unknown (client-supplied)",
+      "alt": "Baked macaroni and cheese in a white ceramic dish with a serving spoon"
+    },
+    "grilled-cheese-pull": {
+      "src": "jay-gajjar-GKvyj1kbp3Q-unsplash.jpg",
+      "aspect": "4:5",
+      "focal": [
+        50,
+        35
+      ],
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "credit": "Jay Gajjar / Unsplash",
+      "alt": "A hand lifting half of a grilled cheese sandwich, the melted cheese stretching between the halves"
+    },
+    "burgers-fries-overhead": {
+      "src": "john-fornander-VedLcUfLi74-unsplash.jpg",
+      "aspect": "16:9",
+      "focal": [
+        50,
+        45
+      ],
+      "widths": [
+        720,
+        1280,
+        1920
+      ],
+      "credit": "John Fornander / Unsplash",
+      "alt": "Overhead shot of three burgers with fries in paper trays and milkshakes on a grey table"
+    },
+    "instant-noodles-egg": {
+      "src": "joshua-ryder-I51a7Yy7mQA-unsplash.jpg",
+      "aspect": "4:5",
+      "focal": [
+        50,
+        55
+      ],
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "credit": "Joshua Ryder / Unsplash",
+      "alt": "Instant noodles with a fried egg in a black pan on a dark surface, shot from above"
+    },
+    "pizza-tray": {
+      "src": "nik-J_-p8jmKf-A-unsplash.jpg",
+      "aspect": "3:2",
+      "focal": [
+        50,
+        50
+      ],
+      "widths": [
+        720,
+        1280,
+        1920
+      ],
+      "credit": "Nik / Unsplash",
+      "alt": "A rectangular pizza with tomato, mozzarella and herbs in a metal tray"
+    },
+    "cauliflower-mac": {
+      "src": "cauli-mac.jpg",
+      "aspect": "4:3",
+      "focal": [
+        50,
+        50
+      ],
+      "widths": [
+        480,
+        640
+      ],
+      "credit": "Client-supplied",
+      "alt": "Baked cauliflower in a cheese sauce in a cream ceramic dish with a green spoon"
+    }
+  },
+  "slots": {
+    "editors-note": "instant-noodles-egg",
+    "neuro-brain": "ramen-overhead",
+    "neuro-sugar": "grilled-cheese-pull",
+    "culture-khichdi": "khichdi-bowl",
+    "culture-polenta": "polenta-plate",
+    "culture-ochazuke": "ochazuke-bowl",
+    "culture-mac": "mac-and-cheese-dish",
+    "culture-surrogacy": "baked-mac-casserole",
+    "data-gender": "pizza-tray",
+    "trends-nostalgia": "burgers-fries-overhead",
+    "trends-reconsidered": "cauliflower-mac"
+  },
+  "unused": {
+    "adobe-stock-comp-962778494-WATERMARKED.jpg": "Adobe Stock watermarked comp \u2014 cannot be published",
+    "Comfort-Food-Dinners.jpg": "1024px, unattributed, looks AI-generated; runner-up for the soup slot",
+    "mario--s27nY8mZUE-unsplash.jpg": "burger close-up; runner-up for the fast-food slot",
+    "llio-angharad-AKxNTx-QGhw-unsplash.jpg": "grilled cheese stack; no slot needed it"
+  }
+}

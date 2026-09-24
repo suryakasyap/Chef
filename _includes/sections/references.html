@@ -1,0 +1,25 @@
+<article class="spread spread--refs" id="references" data-chapter="References">
+  <div class="spread__inner">
+    <header class="spread__head">
+      <p class="kicker">References</p>
+      <h2 class="headline" data-reveal="lines">Sources<br>&amp; credits</h2>
+    </header>
+    <div class="spread__body">
+      <ol class="refs" data-reveal="stagger">
+        <li>Spence, C. "Comfort Food: A Review." <em>International Journal of Gastronomy and Food Science</em>, Oxford.</li>
+        <li>Topiwala, U. "Comfort Foods and its Impact on Individual Psychology." 2022.</li>
+        <li>Wansink, B. &amp; Sangerman, C. Comfort food survey data, Cornell Food and Brand Lab.</li>
+        <li>Wagner, H. et al. "The Myth of Comfort Food."</li>
+        <li>Troisi, J. &amp; Gabriel, S. Social surrogacy and comfort food research.</li>
+        <li>Wansink, B. &amp; Sangerman, C. (2000). Comfort food survey data, Cornell/Illinois Food and Brand Lab.</li>
+        <li>Wansink, B., Cheney, M. M., &amp; Chan, N. (2003). "Exploring comfort food preferences across age and gender." <em>Physiology &amp; Behavior</em>.</li>
+      </ol>
+      <p class="refs__note" data-reveal="up">Survey dataset and full citation list available on request. Design &amp; research by the editorial team, Gastronomic Studies group project.</p>
+      <div class="credits" data-reveal="up">
+        <h3 class="credits__title">Photography</h3>
+        <p>{% for pair in site.data.images %}{% assign im = pair[1] %}{% unless im.credit contains "Client" or im.credit contains "unknown" %}{{ im.credit | replace: " / Unsplash", "" }}{% unless forloop.last %}, {% endunless %}{% endunless %}{% endfor %} via Unsplash; remaining photographs supplied by the editorial team.</p>
+        <p><a class="button" href="{{ '/assets/pdf/Plates_and_Psyche_Magazine.pdf' | relative_url }}" download>Download the issue as PDF <span aria-hidden="true">↓</span></a></p>
+      </div>
+    </div>
+  </div>
+</article>
