@@ -39,8 +39,9 @@ for slug, spec in cfg["images"].items():
         h = int(round(H * w / W))
         r = im.resize((w, h), Image.LANCZOS)
         jpg = out / f"{slug}-{w}.jpg"; webp = out / f"{slug}-{w}.webp"
-        r.save(jpg, "JPEG", quality=82, optimize=True, progressive=True)
-        r.save(webp, "WEBP", quality=80, method=6)
+        jq, wq = (82, 80) if w <= 960 else (74, 72)      # big variants are for high-DPR screens: lighter encode
+        r.save(jpg, "JPEG", quality=jq, optimize=True, progressive=True)
+        r.save(webp, "WEBP", quality=wq, method=6)
         sizes.append({"w": w, "h": h})
     sizes = [dict(t) for t in {tuple(s.items()) for s in sizes}]   # dedupe capped widths
     sizes.sort(key=lambda s: s["w"])

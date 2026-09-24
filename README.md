@@ -48,14 +48,14 @@ The PDF contained nine bracketed photo placeholders and no images. Three indepen
 | Creamy polenta bowl | `polenta-plate` (Arne Buss) | unanimous |
 | Ochazuke | `ochazuke-bowl` (Kouji Tsuru) | unanimous |
 | Mac and cheese | `mac-and-cheese-dish` (images.jpg) | unanimous; only 674 px wide, so it lives in a half-width card |
-| Home cooked soup bowl | `baked-mac-casserole` (David Trinks) | 2–1 vote: the only literal soup photo (Comfort-Food-Dinners.jpg) is 1024 px and looks AI-generated |
+| Home cooked soup bowl | `home-table-soup` (Comfort-Food-Dinners.jpg) | editor's call: the judges' 2–1 pick was the baked casserole (David Trinks), dropped because it duplicated the mac & cheese subject; the client's soup photo is 1024 px so it sits half-width |
 | Homemade comfort food plate on table | `pizza-tray` (Nik) | unanimous |
 | Burger and fries fast food | `burgers-fries-overhead` (John Fornander) | editor's call for literal fidelity; judges' 2–1 pick was the burger close-up |
 | Cauliflower mac and cheese | `cauliflower-mac` (cauli mac.jpg) | unanimous; 640 px, kept half-width |
 | *(added)* Editor's note "2am maggi" | `instant-noodles-egg` (Joshua Ryder) | unanimous |
 | *(added)* Why sugar and fat always win | `grilled-cheese-pull` (Jay Gajjar) | resolved 3-way split |
 
-Not used: `1000_F_962778494_…jpg` is an **Adobe Stock watermarked comp** and cannot be published (renamed `adobe-stock-comp-…-WATERMARKED.jpg` in `assets/img/originals/`); `Comfort-Food-Dinners.jpg`, `mario--s27nY8mZUE-unsplash.jpg` (burger close-up) and `llio-angharad-…jpg` (grilled cheese stack) are kept as alternates.
+Not used: `1000_F_962778494_…jpg` is an **Adobe Stock watermarked comp** and cannot be published (renamed `adobe-stock-comp-…-WATERMARKED.jpg` in `assets/img/originals/`); `david-trinks-…jpg` (baked casserole), `mario--s27nY8mZUE-unsplash.jpg` (burger close-up) and `llio-angharad-…jpg` (grilled cheese stack) are kept as alternates.
 
 ## Working locally
 

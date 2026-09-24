@@ -62,21 +62,6 @@
       "credit": "Kouji Tsuru / Unsplash",
       "alt": "A Japanese rice bowl topped with shredded nori and broth, with small side dishes and chopsticks on a wooden table"
     },
-    "baked-mac-casserole": {
-      "src": "david-trinks-UN1mx680neg-unsplash.jpg",
-      "aspect": "16:9",
-      "focal": [
-        50,
-        50
-      ],
-      "widths": [
-        720,
-        1280,
-        1920
-      ],
-      "credit": "David Trinks / Unsplash",
-      "alt": "A golden-crusted baked mac and cheese in a vintage casserole dish on a stovetop"
-    },
     "mac-and-cheese-dish": {
       "src": "images.jpg",
       "aspect": "4:3",
@@ -90,6 +75,20 @@
       ],
       "credit": "Source unknown (client-supplied)",
       "alt": "Baked macaroni and cheese in a white ceramic dish with a serving spoon"
+    },
+    "home-table-soup": {
+      "src": "Comfort-Food-Dinners.jpg",
+      "aspect": "4:3",
+      "focal": [
+        45,
+        62
+      ],
+      "widths": [
+        480,
+        960
+      ],
+      "credit": "Client-supplied",
+      "alt": "A dinner table set with bowls of soup, bread and a pot pie in front of a lit fireplace"
     },
     "grilled-cheese-pull": {
       "src": "jay-gajjar-GKvyj1kbp3Q-unsplash.jpg",
@@ -149,7 +148,7 @@
         1920
       ],
       "credit": "Nik / Unsplash",
-      "alt": "A rectangular pizza with tomato, mozzarella and herbs in a metal tray"
+      "alt": "A pizza topped with tomato, mozzarella, sausage, red onion and spinach in an open cardboard delivery box"
     },
     "cauliflower-mac": {
       "src": "cauli-mac.jpg",
@@ -174,15 +173,15 @@
     "culture-polenta": "polenta-plate",
     "culture-ochazuke": "ochazuke-bowl",
     "culture-mac": "mac-and-cheese-dish",
-    "culture-surrogacy": "baked-mac-casserole",
+    "culture-surrogacy": "home-table-soup",
     "data-gender": "pizza-tray",
     "trends-nostalgia": "burgers-fries-overhead",
     "trends-reconsidered": "cauliflower-mac"
   },
   "unused": {
     "adobe-stock-comp-962778494-WATERMARKED.jpg": "Adobe Stock watermarked comp \u2014 cannot be published",
-    "Comfort-Food-Dinners.jpg": "1024px, unattributed, looks AI-generated; runner-up for the soup slot",
     "mario--s27nY8mZUE-unsplash.jpg": "burger close-up; runner-up for the fast-food slot",
-    "llio-angharad-AKxNTx-QGhw-unsplash.jpg": "grilled cheese stack; no slot needed it"
+    "llio-angharad-AKxNTx-QGhw-unsplash.jpg": "grilled cheese stack; no slot needed it",
+    "david-trinks-UN1mx680neg-unsplash.jpg": "baked mac & cheese casserole; judges' pick for the soup slot, dropped to avoid a second mac & cheese photo"
   }
 }

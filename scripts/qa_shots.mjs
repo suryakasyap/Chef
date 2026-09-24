@@ -14,6 +14,8 @@ async function shoot(name, { width, height, url, scrollThrough }) {
   const page = await ctx.newPage();
   if (!process.env.QA_NO_CACHE) await cache.install(page);
   const errors = [];
+  let threeRequested = false;
+  page.on('request', (r) => { if (r.url().includes('/three@')) threeRequested = true; });
   page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(`${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
   page.on('requestfailed', (r) => errors.push(`requestfailed: ${r.url()} ${r.failure()?.errorText}`));
@@ -55,7 +57,7 @@ async function shoot(name, { width, height, url, scrollThrough }) {
   fs.mkdirSync(`${out}/${name}.chunks`, { recursive: true });
   chunks.forEach((c, i) => fs.writeFileSync(`${out}/${name}.chunks/${String(i).padStart(3, '0')}.png`, c.buf));
   fs.writeFileSync(`${out}/${name}.chunks/meta.json`, JSON.stringify({ width, height, total, chunks: chunks.map((c) => ({ y: c.y, h: c.h })) }));
-  report.push({ name, errors, state });
+  report.push({ name, errors, state: { ...state, threeRequested } });
   await ctx.close();
 }
 await shoot('desktop-motion', { width: 1440, height: 900, url: base, scrollThrough: true });

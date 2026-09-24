@@ -1,24 +1,30 @@
 /* Cover orb — a noise-displaced sphere lit like the PDF's gold sphere.
- * three.js (WebGL) with a custom GLSL vertex/fragment pair. Renders only
- * while the cover is on screen; falls back to the CSS gradient sphere when
- * WebGL is unavailable, motion is reduced, or the page is in static mode.
+ * three.js (WebGL) with a custom GLSL vertex/fragment pair. three is imported
+ * lazily, after the guards, so static mode, reduced motion and no-WebGL
+ * visitors never download it. Renders only while the cover is on screen and
+ * falls back to the CSS gradient sphere whenever anything is unavailable.
  */
-import * as THREE from 'three';
-
-// The shader writes design-palette values straight to the framebuffer, so keep
-// three from converting the uniform colours to linear space.
-THREE.ColorManagement.enabled = false;
-
 const html = document.documentElement;
 const host = document.querySelector('[data-cover-orb]');
 const canvas = host && host.querySelector('[data-cover-canvas]');
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function fallback() { if (host) host.classList.remove('is-webgl'); }
+function webglAvailable() {
+  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; }
+}
 
-if (!host || !canvas || html.classList.contains('static') || reduced) {
+if (!host || !canvas || html.classList.contains('static') || reduced || !webglAvailable()) {
   fallback();
 } else {
+  const load = () => import('three').then(init).catch(fallback);
+  if ('requestIdleCallback' in window) window.requestIdleCallback(load, { timeout: 1500 }); else setTimeout(load, 150);
+}
+
+function init(THREE) {
+  // The shader writes design-palette values straight to the framebuffer, so keep
+  // three from converting the uniform colours to linear space.
+  THREE.ColorManagement.enabled = false;
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });

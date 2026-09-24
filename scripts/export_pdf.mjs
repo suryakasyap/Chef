@@ -17,7 +17,15 @@ await page.goto(base + '?static=1', { waitUntil: 'networkidle' });
 await page.evaluate(async () => {
   // Chromium re-encodes WebP as lossless PNG inside PDFs (25 MB); drop the WebP sources so the JPEGs embed as-is.
   document.querySelectorAll('picture source[type="image/webp"]').forEach((s) => s.remove());
-  document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager'; i.removeAttribute('srcset'); i.sizes = ''; });
+  // pick the smallest srcset candidate that still gives ~1.25x the rendered width (≈200 dpi on A4)
+  document.querySelectorAll('.figure img').forEach((i) => {
+    const need = i.getBoundingClientRect().width * 1.25;
+    const cands = (i.getAttribute('srcset') || '').split(',').map((s) => { const [u, w] = s.trim().split(/\s+/); return { u, w: parseInt(w, 10) }; }).filter((c) => c.u && c.w).sort((a, b) => a.w - b.w);
+    const pick = cands.find((c) => c.w >= need) || cands[cands.length - 1];
+    i.removeAttribute('srcset'); i.sizes = '';
+    if (pick) i.src = pick.u;
+  });
+  document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager'; });
   await Promise.all(Array.from(document.images).filter((i) => !i.complete).map((i) => new Promise((r) => { i.onload = i.onerror = r; })));
   if (document.fonts) await document.fonts.ready;
 });

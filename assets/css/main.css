@@ -449,6 +449,7 @@ html.motion .split-line { will-change: transform; }
   .loop__arc { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
   .loop { max-width: 100mm; }
   .toc a:hover { padding-left: .25rem; }
+  .toc__arrow { display: none; }
   a { text-decoration: none; }
   .button { display: none; }
   .editors-note__img { max-width: 60mm; }

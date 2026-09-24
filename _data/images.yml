@@ -35,15 +35,6 @@ ochazuke-bowl:
   source: "kouji-tsuru-HY-tBvUs7xw-unsplash.jpg"
   sizes: [480, 960, 1440]
   lqip: "data:image/webp;base64,UklGRhgBAABXRUJQVlA4IAwBAADQBQCdASoYABIAPu1srFEppaQiqAqpMB2JaACdMoMtQ0iw1vetSnPOVhZr972FULgPagRBZ9AAAP7WGk1rE/OoSvA3rxxolDJFFXNLz/OeX4Y6JJKoyQEfOQKkusOCcw/l4axZCrH8EfD0BetnJbxKSh8lWhDyWWMP1FMoszJAlWPuvswlmjdlFo/jNUJYW2k+5juHp66cMw3kgN8fP68zKW0dPPge5VAW2DP7Q/DXL25l3uCGpyQEU7TXYbo+oudiLKoKMByaIJg0VqwkcltExNEnlZ/A/GbYsjI7/Sq/4+MnV866ISmKMol0d8Gjehl8QI8UE1W9ncqKhxhE4ylMKHAtHHSaa4mllkAA"
-baked-mac-casserole:
-  alt: "A golden-crusted baked mac and cheese in a vintage casserole dish on a stovetop"
-  credit: "David Trinks / Unsplash"
-  aspect: "16:9"
-  width: 1920
-  height: 1080
-  source: "david-trinks-UN1mx680neg-unsplash.jpg"
-  sizes: [720, 1280, 1920]
-  lqip: "data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAADQBACdASoYAA4APu1iqU2ppaOiMAgBMB2JbACdMoRiu5UA4kmdr5KiuzVawhGsAAD+8yS/+pUKyqG4PENkkW+9PdmhqQnudmwR5bVuB+KDMlv+mtbsG6Jcf9aeXRbe43rRGfWtcGC6Sg/xKbNYU9pD8hd9tMz/4z4p0wHicFYbndI78uyov0v3KhVgcD8bhincyDVq00A6mAlIROnbGSUabreXAAAA"
 mac-and-cheese-dish:
   alt: "Baked macaroni and cheese in a white ceramic dish with a serving spoon"
   credit: "Source unknown (client-supplied)"
@@ -53,6 +44,15 @@ mac-and-cheese-dish:
   source: "images.jpg"
   sizes: [480, 607]
   lqip: "data:image/webp;base64,UklGRvIAAABXRUJQVlA4IOYAAABQBQCdASoYABIAPu1orlCppaQiqAqpMB2JbACdMs83W0m00TYPdqMWQRk0nMpmZRmc5YAA+MZzGSUb7Gv04Cc8cWgpk2aD2Z9hnqkiYbnCskH6pRjzixBe4lRqc4K8bf+FGKOX9MD5r4OJLms821d3SWrRtOpozYabCYHkcZK7SABR03GqnhlttqyqcMwD6kpdho9MhS8KBJFbZTlIRKjButRKFCu29NaQYbNlPGEOgt9mwAbIjLovevJ4DVu88M74S087Hi8/Q/euoNGCDg1k7kRL+7DVU8BqmUBOEbOYBqVREJAAAA=="
+home-table-soup:
+  alt: "A dinner table set with bowls of soup, bread and a pot pie in front of a lit fireplace"
+  credit: "Client-supplied"
+  aspect: "4:3"
+  width: 960
+  height: 720
+  source: "Comfort-Food-Dinners.jpg"
+  sizes: [480, 960]
+  lqip: "data:image/webp;base64,UklGRgoBAABXRUJQVlA4IP4AAACQBgCdASoYABIAPu1sqlEppaOiqAqpMB2JaACdMoPHLd1bSRdgjDQk4YkidZWL3Tb+ywqM+rOdEyLlToywAP7pDnif8wQ2v4aSf+vWxYsffjUQET4t0kubm+WQvy4ISN7293fjmzz863GoFeKQ/rwHowJOuem8WScL3urUoTAHhbzRupNHN8leVoiFK0cnZU4+YZ3Yl20aUGS+2w4outDdEGGaWlnFWqqhUFVqVT81PNsm7XGHV/sxj3eUQZTz+jI4x3DSo5jJO+5pjb+T79oUlDqW69eT7DDuONdjJn2Yy055e5gvfxeHV2W0z6uV8vhXQA/UcUtJ90RudYAAAA=="
 grilled-cheese-pull:
   alt: "A hand lifting half of a grilled cheese sandwich, the melted cheese stretching between the halves"
   credit: "Jay Gajjar / Unsplash"
@@ -81,7 +81,7 @@ instant-noodles-egg:
   sizes: [480, 960, 1440]
   lqip: "data:image/webp;base64,UklGRsoAAABXRUJQVlA4IL4AAAAQBgCdASoYAB4APu1grFAppSQisBgIATAdiWoAsQEABT/En75nm8Wg2lunwCBhKbYiumeUaGf8bYAA/vKxqAKO4w1hCfSeyoaIS3X74yMJdzo5KIJTUrjqKC72AzBTGc8lfUUDDeOVsyfR4jTPE2g31CcncrymgzOpCDdZ5FcIXuEhWSRG8xssTgOMZLQjgN8NR7YWNyvRqTH99y6KWBrtBShcCtWTJPKabn/lasz2cBUJCZbXoa58sgzTQAAA"
 pizza-tray:
-  alt: "A rectangular pizza with tomato, mozzarella and herbs in a metal tray"
+  alt: "A pizza topped with tomato, mozzarella, sausage, red onion and spinach in an open cardboard delivery box"
   credit: "Nik / Unsplash"
   aspect: "3:2"
   width: 1920
